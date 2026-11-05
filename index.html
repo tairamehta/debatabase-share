@@ -4,40 +4,123 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
 <title>debatabase</title>
 <style>
-:root{--paper:#f2f2f2;--rect:#fff;--ink:#111;--ink2:#444;--mute:#777;--line:#c8c8c8;--teal:#0e7c72;--mono:ui-monospace,"SF Mono",Menlo,monospace}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 -apple-system,"Helvetica Neue",Arial,sans-serif}
-main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
-.lab{font-family:var(--mono);font-size:11.5px;color:var(--mute);text-transform:lowercase;letter-spacing:.02em}
-h1{font-family:"New York",Georgia,serif;font-weight:400;font-size:26px;line-height:1.3;margin:8px 0 4px}
-.rect{background:var(--rect);border:1px solid var(--line);padding:16px;margin-top:16px}
-.rect.us{border-left:3px solid var(--teal)}
-.head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
-.role{font-size:16px}
-audio{width:100%;margin-top:10px;display:block}
-details{margin-top:10px}summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;color:var(--teal)}
-.tr{white-space:pre-wrap;color:var(--ink2);font-size:14px;margin-top:8px}
-.brand{display:flex;align-items:center;gap:8px;margin-bottom:24px}.brand b{font-family:var(--mono);font-weight:500;font-size:13px}
-.foot{margin-top:32px}
+:root{--paper:#f2f2f2;--rect:#fff;--ink:#111;--ink2:#444;--mute:#777;--line:#c8c8c8;--teal:#0e7c72;--red:#b3261e;
+  --sans:-apple-system,"SF Pro Text","Inter","Helvetica Neue",Helvetica,Arial,sans-serif;--mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font:13px/1.5 var(--sans);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 96px}
+.lab{font-family:var(--mono);font-size:11.5px;color:var(--mute);letter-spacing:.01em}
+.mute{color:var(--mute)} .red{color:var(--red)} .teal{color:var(--teal)} .mono{font-family:var(--mono);font-size:11.5px}
+.brand{font-family:var(--mono);font-size:13px;font-weight:600;margin-bottom:24px}
+.rect{background:var(--rect);border:1px solid var(--line);padding:16px} .rect>.lab{display:block;margin-bottom:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.stack{display:grid;gap:16px;align-content:start}
+.bar{display:flex;gap:16px;align-items:center;margin:16px 0;flex-wrap:wrap} .bar .sp{flex:1}
+.motion{font-size:15px;line-height:1.4} .motion.big{font-size:20px;line-height:1.35}
+h1{font-family:"New York",Georgia,serif;font-weight:400;font-size:24px;line-height:1.3;margin:6px 0 0}
+.b{display:inline-block;border:1px solid var(--line);background:var(--rect);padding:7px 12px;font-family:var(--mono);font-size:11.5px;color:var(--ink);line-height:1.3;white-space:nowrap}
+.seg{display:inline-flex} .seg .b{margin-right:-1px} .seg .b[aria-pressed=true]{border-color:var(--ink);position:relative;z-index:1;background:var(--paper)}
+.hint{color:var(--mute);font-size:12px;line-height:1.5}
+table.t{width:100%;border-collapse:collapse;background:var(--rect);border:1px solid var(--line);font-size:13px}
+table.t th{text-align:left;font-family:var(--mono);font-weight:400;font-size:11.5px;color:var(--mute);padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top} table.t tr:last-child td{border-bottom:0}
+.point{padding:16px 0;border-top:1px solid var(--line)} .point:first-of-type{border-top:0;padding-top:0}
+.point .pt{font-size:13px;font-weight:600;line-height:1.5;margin-bottom:8px;display:grid;grid-template-columns:20px 1fr;gap:8px} .point .pt .letter{font-family:var(--mono);font-weight:400;color:var(--mute)} .point .pt.weak .txt{color:var(--red)}
+.point dl{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:13px;line-height:1.5} .point dt{font-family:var(--mono);font-size:11.5px;color:var(--mute);padding-top:2px} .point dd{color:var(--ink2)} .point dd ul{list-style:none} .point dd li{padding-left:12px;position:relative} .point dd li::before{content:"–";position:absolute;left:0;color:var(--mute)} .point dd.weak li{color:var(--red)}
+.point .gap{font-size:13px;color:var(--red);margin-top:8px;line-height:1.5} .point .sp{margin-top:8px}
+.kp{list-style:none;margin-top:8px} .kp li{display:grid;grid-template-columns:40px 1fr;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45} .kp li:first-child{border-top:0} .kp .at{font-family:var(--mono);font-size:11px;color:var(--mute);padding-top:2px} .kp .kind{font-family:var(--mono);font-size:11px;color:var(--mute);margin-left:6px}
+audio{width:100%;margin-top:8px;display:block}
+details{margin-top:10px} summary{cursor:pointer;font-family:var(--mono);font-size:11.5px;color:var(--teal);list-style:none} summary::before{content:"▸ "} details[open] summary::before{content:"▾ "}
+.transcript{font-size:13px;line-height:1.6;color:var(--ink2);white-space:pre-wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.debby p{margin:0 0 8px;line-height:1.55;color:var(--ink2)} .debby ul,.debby ol{margin:0 0 8px 18px;color:var(--ink2)} .debby li{margin-bottom:4px} .debby h3{font-size:13px;font-weight:600;margin:16px 0 6px} .debby blockquote{border-left:1px solid var(--line);padding-left:12px;margin:6px 0 10px;color:var(--ink)}
+.place{display:grid;grid-template-columns:20px 36px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:baseline} .place:first-of-type{border-top:0;padding-top:0} .place .rk{font-family:var(--mono)} .place .sc{font-family:var(--mono);font-size:11px;color:var(--mute);margin-top:4px}
+.todo{display:grid;grid-template-columns:16px 1fr;gap:8px;padding:8px 0;border-top:1px solid var(--line)} .todo:first-of-type{border-top:0}
+.area{white-space:pre-wrap;line-height:1.55;color:var(--ink2)}
 </style>
 </head>
-<body><main><div class="brand"><b>debatabase</b></div><div id="page"><span class="lab">loading…</span></div></main>
+<body><main><div class="brand">debatabase</div><div id="page"><span class="lab">loading…</span></div></main>
 <script>
 const API="https://txuxpumixlntkeoijbhs.supabase.co/functions/v1/share/";
+const $=(s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const mmss=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+const fmt=s=>{s=Math.max(0,Math.round(s||0));return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`};
+const fmtDate=iso=>{const d=new Date(iso);return isNaN(d)?(iso||""):d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})};
+const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split(/\n{2,}/).map(p=>{const l=p.trim().split("\n"); if(!l[0]) return ""; if(l.every(x=>/^[-*•] /.test(x))) return "<ul>"+l.map(x=>`<li>${x.slice(2)}</li>`).join("")+"</ul>"; if(/^#{1,4} /.test(l[0])) return `<h3>${l[0].replace(/^#+ /,"")}</h3>`+(l.length>1?`<p>${l.slice(1).join("<br>")}</p>`:""); return `<p>${l.join("<br>")}</p>`}).join("");
+const TEAMS=["OG","OO","CG","CO"], ORDER=["PM","LO","DPM","DLO","MG","MO","GW","OW"], SPEECH_SECS=435;
+const ROLE={PM:"Prime Minister",LO:"Leader of Opposition",DPM:"Deputy Prime Minister",DLO:"Deputy Leader of Opposition",MG:"Member of Government",MO:"Member of Opposition",GW:"Government Whip",OW:"Opposition Whip"};
+const TEAM={PM:"OG",DPM:"OG",LO:"OO",DLO:"OO",MG:"CG",GW:"CG",MO:"CO",OW:"CO"};
+const splitMotion=m=>{const i=(m||"").search(/\n\s*\n|\bInfo slide\b/i); return i>0?{motion:m.slice(0,i).trim(),slide:m.slice(i).replace(/^\s*info slide[:.]?\s*/i,"").trim()}:{motion:m||"",slide:""}};
+let r, pg="speeches";
+
+function player(s,title){ return s.url?`<audio controls preload="none" src="${esc(s.url)}" title="${esc(title)}"></audio>`:`<div class="hint">recording not uploaded</div>` }
+function transcriptBox(s){ return s.transcript?`<details><summary>transcript</summary><div class="transcript">${esc(s.transcript)}</div></details>`:"" }
+
+function casePage(){
+  const cl=r.caselines, v=r.judge, c=r.calibration;
+  const debbyCall=v?[...v.ranking].sort((a,b)=>a.rank-b.rank).map(t=>t.team).join(" › "):"";
+  const verdict=`<div class="grid2" style="margin-bottom:16px"><div class="rect"><span class="lab">the chair's call${r.chair?" · "+esc(r.chair):""}</span><div class="motion big">${r.result?esc(r.result):`<span class="mute">no result yet</span>`}</div></div>
+    <div class="rect"><span class="lab">debby's call${c?` · ${esc(c.agreement||"")}`:""}</span><div class="motion big">${debbyCall||`<span class="mute">not judged yet</span>`}</div></div></div>`;
+  if(!cl) return verdict+`<div class="rect"><span class="lab">case lines</span><div class="motion mute">not built yet</div></div>`;
+  const F=[["importance","importance"],["mechanisms","mechanisms"],["implications","implications"],["further_impacts","further impacts"],["weighing","weighing"]];
+  const bullets=v=>Array.isArray(v)?v:String(v||"").split(/(?<=[.!?])\s+/).filter(Boolean);
+  const team=t=>`<div class="rect"><span class="lab">${t}${r.side===t?" · us":""} · ${(cl.teams[t]||[]).length} point${(cl.teams[t]||[]).length===1?"":"s"}</span>
+      ${(cl.teams[t]||[]).map((p,i)=>`<div class="point"><div class="pt ${(p.weak||[]).includes("title")?"weak":""}"><span class="letter">${String.fromCharCode(65+i)}</span><span class="txt">${esc(p.title)}</span></div>
+        <dl>${F.map(([k,l])=>{const b=bullets(p[k]); return b.length?`<dt>${l}</dt><dd class="${(p.weak||[]).includes(k)?"weak":""}"><ul>${b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd>`:""}).join("")}</dl>
+        ${p.gap?`<div class="gap">${esc(p.gap)}</div>`:""}<div class="lab sp">${(p.speeches||[]).join(", ")}</div></div>`).join("")||`<div class="mute">no points</div>`}</div>`;
+  return verdict+`<div class="grid2">${TEAMS.map(team).join("")}</div>${cl.clash?`<div class="bar"><span class="hint">${esc(cl.clash)}</span></div>`:""}`;
+}
+function speechesPage(){
+  const kp=(r.keypoints||{}).speeches||{}; const by={}; r.speeches.forEach(s=>by[s.code]=s);
+  const cell=code=>{const s=by[code], team=TEAM[code];
+    if(!s) return `<div class="rect"><span class="lab">${esc(ROLE[code])} · ${team}</span><span class="mute">no recording</span></div>`;
+    const pts=kp[code]||[]; const over=s.elapsed>SPEECH_SECS;
+    return `<div class="rect"><span class="lab">${esc(ROLE[code])} · ${team}${r.side===team?" · us":""} · ${fmt(s.elapsed??s.duration)}${over?" · over time":""}</span>
+      ${player(s,ROLE[code])}
+      ${pts.length?`<ul class="kp">${pts.map(p=>`<li><span class="at">${esc(p.at||"")}</span><span>${esc(p.point)}<span class="kind">${esc(p.kind)}</span></span></li>`).join("")}</ul>`:""}
+      ${transcriptBox(s)}</div>`};
+  const fb=r.speeches.filter(s=>s.code==="FEEDBACK");
+  return `<div class="grid2">${ORDER.map(cell).join("")}
+    <div class="rect"><span class="lab">the chair${fb.length?" · "+fb.map(s=>fmt(s.elapsed??s.duration)).join(", "):""}</span>${fb.length?fb.map(s=>player(s,"The chair")+transcriptBox(s)).join(""):`<span class="mute">no recording</span>`}</div></div>`;
+}
+function debbyPage(){
+  const v=r.judge,c=r.calibration,us=r.side; const ours=r.speeches.filter(s=>s.team===us&&s.code!=="PREP");
+  const rfd=`<div class="rect debby"><span class="lab">reason for decision${v?` · ${esc(fmtDate(v.judged_at))}`:""}</span>
+    ${v?`${[...v.ranking].sort((a,b)=>a.rank-b.rank).map(t=>`<div class="place"><span class="rk">${t.rank}</span><span>${esc(t.team)}</span><div>${esc(t.reason)}<div class="sc">${(t.speakers||[]).map(s=>`${esc(s.role)} ${s.score}`).join(" · ")}${t.confidence!=="high"?` · ${t.confidence} confidence`:""}</div></div></div>`).join("")}
+      <h3>Clashes</h3>${(v.clashes||[]).map(x=>`<p><b>${esc(x.title)}</b> ${esc(x.analysis)}</p>`).join("")}<h3>Oral adjudication</h3>${md(v.oral_adjudication||"")}<h3>To each team</h3>${TEAMS.map(t=>`<p><b>${t}</b> ${esc((v.team_feedback||{})[t]||"")}</p>`).join("")}`
+    :`<p class="mute">Not judged yet.</p>`}</div>`;
+  const coach=`<div class="rect debby"><span class="lab">feedback on our speeches</span>
+    ${ours.map(s=>{const k=(r.coach||{})[s.file]; return `<h3>${esc(s.role)}${k?` · ${k.score}`:""}</h3>${k?`<p><b>${esc(k.headline)}</b> ${esc(k.what_you_tried)}</p><ol>${(k.what_cost_you||[]).map(x=>`<li><b>${esc(x.issue)}</b> ${esc(x.why_it_mattered)} <i>Fix:</i> ${esc(x.fix)}</li>`).join("")}</ol>${k.rewrite?`<p class="lab">say this instead · ${esc(k.rewrite.moment)}</p><blockquote>${esc(k.rewrite.say_this)}</blockquote>`:""}${k.drill?`<p><b>Drill</b> ${esc(k.drill)}</p>`:""}`:`<p class="mute">Not coached yet.</p>`}`}).join("")||`<p class="mute">No speeches on our side.</p>`}</div>`;
+  const learn=`<div class="rect debby"><span class="lab">learnings</span>
+    ${c?`<p><b>The chair</b> ${esc((c.panel_ranking||[]).join(" › "))}${c.agreement?` · Debby was ${esc(c.agreement)}`:""}</p><p>${esc(c.panel_decisive_logic||"")}</p>${(c.ai_divergences||[]).length?`<h3>Where Debby diverged</h3><ul>${c.ai_divergences.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}${c.feedback_to_us?`<h3>To us</h3><p>${esc(c.feedback_to_us)}</p>`:""}<h3>Lessons kept</h3><ul>${(c.lessons||[]).map(l=>`<li><b>${esc(l.topic)}</b> ${esc(l.rule)}</li>`).join("")}</ul>`:`<p class="mute">Nothing learned from the chair yet.</p>`}
+    ${r.feedback?`<h3>What the chair said</h3><div class="area">${esc(r.feedback)}</div>`:""}</div>`;
+  const L=r.levers; const lv=L&&L.teams?`<div class="rect debby"><span class="lab">paths to victory</span>
+    ${TEAMS.map(t=>{const ls=(L.teams[t]||[]); return ls.length?`<h3>${t}${r.side===t?" · us":""}</h3><table class="t"><tr><th>Lever</th><th>Requirements</th><th>Did they</th></tr>${ls.map(x=>`<tr><td>${esc(x.lever)}</td><td>${(x.requirements||[]).map(q=>`<div>· ${esc(q)}</div>`).join("")}</td><td class="${x.done==="yes"?"teal":x.done==="no"?"red":""}">${esc(x.done)}<div class="hint">${esc(x.evidence)}</div></td></tr>`).join("")}</table>`:""}).join("")}
+    ${L.decisive?`<p class="hint" style="margin-top:12px">${esc(L.decisive)}</p>`:""}${(L.best_cases||[]).length?`<p class="hint"><b>Strongest cases on this motion:</b> ${L.best_cases.map(b=>`${esc(b.side)}: ${esc(b.case)}${b.run?"":" <span class='red'>(nobody ran it)</span>"}`).join(" · ")}</p>`:""}</div>`:"";
+  const rt=r.reflection_todos;
+  const reflect=(r.reflection||rt)?`<div class="rect debby"><span class="lab">reflection</span>${r.reflection?`<div class="area">${esc(r.reflection)}</div>`:""}
+    ${rt?`<p class="lab" style="margin-top:12px">${esc(rt.summary||"")}</p>`:""}${rt&&rt.todos&&rt.todos.length?`<div style="margin-top:8px">${rt.todos.map(t=>`<div class="todo"><span class="lab">·</span><span>${esc(t.text)}${t.why?`<div class="hint">${esc(t.why)}</div>`:""}</span></div>`).join("")}</div>`:""}</div>`:"";
+  const pr=r.prep_review;
+  const prep=(r.prep_notes||pr)?`<div class="rect debby"><span class="lab">prep</span>${r.prep_notes?`<div class="area">${esc(r.prep_notes)}</div>`:""}
+    ${pr?`<p style="margin-top:12px">${esc(pr.verdict)}</p><h3>Timeline</h3><table class="t"><tr><th>At</th><th>Doing</th></tr>${(pr.timeline||[]).map(x=>`<tr><td class="mono">${esc(x.at)}</td><td>${esc(x.doing)}</td></tr>`).join("")}</table>${(pr.slow||[]).length?`<h3>Slow</h3><ul>${pr.slow.map(x=>`<li><b>${esc(x.item)}</b> ${esc(x.took)}. ${esc(x.should)}</li>`).join("")}</ul>`:""}${(pr.missing||[]).length?`<h3>Missing</h3><ul>${pr.missing.map(x=>`<li><b>${esc(x.item)}</b> ${esc(x.cost)}</li>`).join("")}</ul>`:""}${(pr.strengths||[]).length?`<h3>Went well</h3><ul>${pr.strengths.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}`:""}</div>`:"";
+  return `<div class="grid2"><div class="stack">${rfd}${coach}${learn}</div><div class="stack">${lv}${reflect}${prep}</div></div>`;
+}
+function render(){
+  const sm=splitMotion(r.motion);
+  const head=[r.shared_by?`shared by ${esc(r.shared_by)}`:"",r.round_no?esc(r.round_no):"",fmtDate(r.date),r.room?esc(r.room):"",r.chair?"chair "+esc(r.chair):"",r.category?esc(r.category):"",r.side?`${esc(r.side)} · us`:""].filter(Boolean).join(" · ");
+  $("#page").innerHTML=`<div class="rect"><span class="lab">${head}</span><h1>${esc(sm.motion||"untitled round")}</h1>${sm.slide?`<div class="hint" style="margin-top:8px;white-space:pre-wrap">${esc(sm.slide)}</div>`:""}</div>
+    <div class="bar"><div class="seg">${[["case","Case"],["speeches","Speeches"],["debby","Debby"]].map(([k,l])=>`<button class="b" data-pg="${k}" aria-pressed="${pg===k}">${l}</button>`).join("")}</div></div>
+    <div id="pg">${pg==="case"?casePage():pg==="speeches"?speechesPage():debbyPage()}</div>
+    <p class="lab" style="margin-top:32px">links to the recordings refresh each time this page is opened</p>`;
+  $$("[data-pg]").forEach(b=>b.onclick=()=>{pg=b.dataset.pg; render(); window.scrollTo(0,0)});
+}
 (async()=>{
-  const box=document.getElementById("page");
+  const box=$("#page");
   const token=(location.hash.slice(1)||new URLSearchParams(location.search).get("t")||"").replace(/[^A-Za-z0-9_-]/g,"");
   if(!token){ box.innerHTML=`<span class="lab">no link</span>`; return }
-  let r; try{ const res=await fetch(API+token,{headers:{accept:"application/json"}}); r=await res.json(); if(!res.ok) throw new Error(r.error||res.status) }
-  catch(e){ box.innerHTML=`<span class="lab">${esc(e.message==="404"?"this link has been turned off":"could not load this round")}</span>`; return }
-  document.title=r.motion||"debatabase";
-  const date=r.date?new Date(r.date).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
-  const meta=[r.shared_by?`shared by ${esc(r.shared_by)}`:"",esc(r.round_no),date,r.side?`${esc(r.side)} · us`:"",esc(r.result)].filter(Boolean).join(" · ");
-  const cards=(r.speeches||[]).map(s=>`<section class="rect${s.us?" us":""}"><div class="head"><span class="role">${esc(s.who)}</span><span class="lab">${esc(s.team||"")}${s.duration?` · ${mmss(s.duration)}`:""}</span></div>
-    ${s.url?`<audio controls preload="none" src="${esc(s.url)}"></audio>`:`<p class="lab">recording not uploaded</p>`}
-    ${s.transcript?`<details><summary>transcript</summary><div class="tr">${esc(s.transcript)}</div></details>`:""}</section>`).join("");
-  box.innerHTML=`<span class="lab">${meta}</span><h1>${esc(r.motion||"untitled round")}</h1>${cards||`<p class="lab">no speeches yet</p>`}<p class="lab foot">links to the recordings refresh each time this page is opened</p>`;
+  try{ const res=await fetch(API+token,{headers:{accept:"application/json"}}); r=await res.json(); if(!res.ok) throw new Error(r.error||res.status) }
+  catch(e){ box.innerHTML=`<span class="lab">${esc(e.message==="404"?"this link has been turned off":e.message||"could not load this round")}</span>`; return }
+  r.speeches=r.speeches||[]; document.title=splitMotion(r.motion).motion||"debatabase"; render();
 })();
 </script>
 </body></html>
