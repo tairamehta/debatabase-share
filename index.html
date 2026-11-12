@@ -47,7 +47,10 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 const fmt=s=>{s=Math.max(0,Math.round(s||0));return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`};
 const fmtDate=iso=>{const d=new Date(iso);return isNaN(d)?(iso||""):d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})};
 const md=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split(/\n{2,}/).map(p=>{const l=p.trim().split("\n"); if(!l[0]) return ""; if(l.every(x=>/^[-*•] /.test(x))) return "<ul>"+l.map(x=>`<li>${x.slice(2)}</li>`).join("")+"</ul>"; if(/^#{1,4} /.test(l[0])) return `<h3>${l[0].replace(/^#+ /,"")}</h3>`+(l.length>1?`<p>${l.slice(1).join("<br>")}</p>`:""); return `<p>${l.join("<br>")}</p>`}).join("");
-const TEAMS=["OG","OO","CG","CO"], ORDER=["PM","LO","DPM","DLO","MG","MO","GW","OW"], SPEECH_SECS=435;
+const TEAMS=["OG","OO","CG","CO"], ORDER=["PM","LO","DPM","DLO","MG","MO","GW","OW"];
+function roomTeams(r){ const back=(r.speeches||[]).filter(s=>["MG","MO","GW","OW"].includes(s.code)); return back.every(s=>Math.max(s.elapsed||0,s.duration||0)<60)?["OG","OO"]:TEAMS }
+function roomOrder(r){ const t=roomTeams(r); return ORDER.filter(c=>t.includes(TEAM[c])) }
+const SPEECH_SECS=435;
 const ROLE={PM:"Prime Minister",LO:"Leader of Opposition",DPM:"Deputy Prime Minister",DLO:"Deputy Leader of Opposition",MG:"Member of Government",MO:"Member of Opposition",GW:"Government Whip",OW:"Opposition Whip"};
 const TEAM={PM:"OG",DPM:"OG",LO:"OO",DLO:"OO",MG:"CG",GW:"CG",MO:"CO",OW:"CO"};
 const splitMotion=m=>{const i=(m||"").search(/\n\s*\n|\bInfo slide\b/i); return i>0?{motion:m.slice(0,i).trim(),slide:m.slice(i).replace(/^\s*info slide[:.]?\s*/i,"").trim()}:{motion:m||"",slide:""}};
@@ -68,7 +71,7 @@ function casePage(){
       ${(cl.teams[t]||[]).map((p,i)=>`<div class="point"><div class="pt ${(p.weak||[]).includes("title")?"weak":""}"><span class="letter">${String.fromCharCode(65+i)}</span><span class="txt">${esc(p.title)}</span></div>
         <dl>${F.map(([k,l])=>{const b=bullets(p[k]); return b.length?`<dt>${l}</dt><dd class="${(p.weak||[]).includes(k)?"weak":""}"><ul>${b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd>`:""}).join("")}</dl>
         ${p.gap?`<div class="gap">${esc(p.gap)}</div>`:""}<div class="lab sp">${(p.speeches||[]).join(", ")}</div></div>`).join("")||`<div class="mute">no points</div>`}</div>`;
-  return verdict+`<div class="grid2">${TEAMS.map(team).join("")}</div>${cl.clash?`<div class="bar"><span class="hint">${esc(cl.clash)}</span></div>`:""}`;
+  return verdict+`<div class="grid2">${roomTeams(r).map(team).join("")}</div>${cl.clash?`<div class="bar"><span class="hint">${esc(cl.clash)}</span></div>`:""}`;
 }
 function speechesPage(){
   const kp=(r.keypoints||{}).speeches||{}; const by={}; r.speeches.forEach(s=>by[s.code]=s);
@@ -87,7 +90,7 @@ function debbyPage(){
   const v=r.judge,c=r.calibration,us=r.side; const ours=r.speeches.filter(s=>s.team===us&&s.code!=="PREP");
   const rfd=`<div class="rect debby"><span class="lab">reason for decision${v?` · ${esc(fmtDate(v.judged_at))}`:""}</span>
     ${v?`${[...v.ranking].sort((a,b)=>a.rank-b.rank).map(t=>`<div class="place"><span class="rk">${t.rank}</span><span>${esc(t.team)}</span><div>${esc(t.reason)}<div class="sc">${(t.speakers||[]).map(s=>`${esc(s.role)} ${s.score}`).join(" · ")}${t.confidence!=="high"?` · ${t.confidence} confidence`:""}</div></div></div>`).join("")}
-      <h3>Clashes</h3>${(v.clashes||[]).map(x=>`<p><b>${esc(x.title)}</b> ${esc(x.analysis)}</p>`).join("")}<h3>Oral adjudication</h3>${md(v.oral_adjudication||"")}<h3>To each team</h3>${TEAMS.map(t=>`<p><b>${t}</b> ${esc((v.team_feedback||{})[t]||"")}</p>`).join("")}`
+      <h3>Clashes</h3>${(v.clashes||[]).map(x=>`<p><b>${esc(x.title)}</b> ${esc(x.analysis)}</p>`).join("")}<h3>Oral adjudication</h3>${md(v.oral_adjudication||"")}<h3>To each team</h3>${(v.teams||TEAMS).map(t=>`<p><b>${t}</b> ${esc((v.team_feedback||{})[t]||"")}</p>`).join("")}`
     :`<p class="mute">Not judged yet.</p>`}</div>`;
   const coach=`<div class="rect debby"><span class="lab">feedback on our speeches</span>
     ${ours.map(s=>{const k=(r.coach||{})[s.file]; return `<h3>${esc(s.role)}${k?` · ${k.score}`:""}</h3>${k?`<p><b>${esc(k.headline)}</b> ${esc(k.what_you_tried)}</p><ol>${(k.what_cost_you||[]).map(x=>`<li><b>${esc(x.issue)}</b> ${esc(x.why_it_mattered)} <i>Fix:</i> ${esc(x.fix)}</li>`).join("")}</ol>${k.rewrite?`<p class="lab">say this instead · ${esc(k.rewrite.moment)}</p><blockquote>${esc(k.rewrite.say_this)}</blockquote>`:""}${k.drill?`<p><b>Drill</b> ${esc(k.drill)}</p>`:""}`:`<p class="mute">Not coached yet.</p>`}`}).join("")||`<p class="mute">No speeches on our side.</p>`}</div>`;
