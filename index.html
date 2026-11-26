@@ -86,11 +86,12 @@ function speechesPage(){
   return `<div class="grid2">${ORDER.map(cell).join("")}
     <div class="rect"><span class="lab">the chair${fb.length?" · "+fb.map(s=>fmt(s.elapsed??s.duration)).join(", "):""}</span>${fb.length?fb.map(s=>player(s,"The chair")+transcriptBox(s)).join(""):`<span class="mute">no recording</span>`}</div></div>`;
 }
+function roundFeedback(v){ const f=v&&v.round_feedback; if(!f) return ""; return `<h3>The round</h3><p>${esc(f.quality||"")}</p><p class="lab">what nobody did</p><ul>${(f.missing||[]).map(m=>`<li><b>${esc(m.what)}</b> ${esc(m.why_it_mattered)}</li>`).join("")}</ul><p class="lab">the best version of this debate</p><p>${esc(f.best_version||"")}</p>` }
 function debbyPage(){
   const v=r.judge,c=r.calibration,us=r.side; const ours=r.speeches.filter(s=>s.team===us&&s.code!=="PREP");
   const rfd=`<div class="rect debby"><span class="lab">reason for decision${v?` · ${esc(fmtDate(v.judged_at))}`:""}</span>
     ${v?`${[...v.ranking].sort((a,b)=>a.rank-b.rank).map(t=>`<div class="place"><span class="rk">${t.rank}</span><span>${esc(t.team)}</span><div>${esc(t.reason)}<div class="sc">${(t.speakers||[]).map(s=>`${esc(s.role)} ${s.score}`).join(" · ")}${t.confidence!=="high"?` · ${t.confidence} confidence`:""}</div></div></div>`).join("")}
-      <h3>Clashes</h3>${(v.clashes||[]).map(x=>`<p><b>${esc(x.title)}</b> ${esc(x.analysis)}</p>`).join("")}<h3>Oral adjudication</h3>${md(v.oral_adjudication||"")}<h3>To each team</h3>${(v.teams||TEAMS).map(t=>`<p><b>${t}</b> ${esc((v.team_feedback||{})[t]||"")}</p>`).join("")}`
+      <h3>Clashes</h3>${(v.clashes||[]).map(x=>`<p><b>${esc(x.title)}</b> ${esc(x.analysis)}</p>`).join("")}<h3>Oral adjudication</h3>${md(v.oral_adjudication||"")}<h3>To each team</h3>${(v.teams||TEAMS).map(t=>`<p><b>${t}</b> ${esc((v.team_feedback||{})[t]||"")}</p>`).join("")}${roundFeedback(v)}`
     :`<p class="mute">Not judged yet.</p>`}</div>`;
   const coach=`<div class="rect debby"><span class="lab">feedback on our speeches</span>
     ${ours.map(s=>{const k=(r.coach||{})[s.file]; return `<h3>${esc(s.role)}${k?` · ${k.score}`:""}</h3>${k?`<p><b>${esc(k.headline)}</b> ${esc(k.what_you_tried)}</p><ol>${(k.what_cost_you||[]).map(x=>`<li><b>${esc(x.issue)}</b> ${esc(x.why_it_mattered)} <i>Fix:</i> ${esc(x.fix)}</li>`).join("")}</ol>${k.rewrite?`<p class="lab">say this instead · ${esc(k.rewrite.moment)}</p><blockquote>${esc(k.rewrite.say_this)}</blockquote>`:""}${k.drill?`<p><b>Drill</b> ${esc(k.drill)}</p>`:""}`:`<p class="mute">Not coached yet.</p>`}`}).join("")||`<p class="mute">No speeches on our side.</p>`}</div>`;
