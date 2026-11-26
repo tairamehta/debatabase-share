@@ -56,7 +56,7 @@ const TEAM={PM:"OG",DPM:"OG",LO:"OO",DLO:"OO",MG:"CG",GW:"CG",MO:"CO",OW:"CO"};
 const splitMotion=m=>{const i=(m||"").search(/\n\s*\n|\bInfo slide\b/i); return i>0?{motion:m.slice(0,i).trim(),slide:m.slice(i).replace(/^\s*info slide[:.]?\s*/i,"").trim()}:{motion:m||"",slide:""}};
 let r, pg="speeches";
 
-function player(s,title){ return s.url?`<audio controls preload="none" src="${esc(s.url)}" title="${esc(title)}"></audio>`:`<div class="hint">recording not uploaded</div>` }
+function player(s,title){ return s.url?`<audio controls preload="none" src="${esc(s.url)}" title="${esc(title)}"></audio>`:`<div class="hint">transcript only</div>` }
 function transcriptBox(s){ return s.transcript?`<details><summary>transcript</summary><div class="transcript">${esc(s.transcript)}</div></details>`:"" }
 
 function casePage(){
