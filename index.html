@@ -65,12 +65,12 @@ function casePage(){
   const verdict=`<div class="grid2" style="margin-bottom:16px"><div class="rect"><span class="lab">the chair's call${r.chair?" · "+esc(r.chair):""}</span><div class="motion big">${r.result?esc(r.result):`<span class="mute">no result yet</span>`}</div></div>
     <div class="rect"><span class="lab">debby's call${c?` · ${esc(c.agreement||"")}`:""}</span><div class="motion big">${debbyCall||`<span class="mute">not judged yet</span>`}</div></div></div>`;
   if(!cl) return verdict+`<div class="rect"><span class="lab">case lines</span><div class="motion mute">not built yet</div></div>`;
-  const F=[["importance","importance"],["mechanisms","mechanisms"],["implications","implications"],["further_impacts","further impacts"],["weighing","weighing"]];
+  const F=[["importance","importance"],["mechanisms","mechanisms"],["implications","implications"],["further_impacts","impacts"],["weighing","weighing"],["frameworks","weighing frameworks"]];
   const bullets=v=>Array.isArray(v)?v:String(v||"").split(/(?<=[.!?])\s+/).filter(Boolean);
   const team=t=>`<div class="rect"><span class="lab">${t}${r.side===t?" · us":""} · ${(cl.teams[t]||[]).length} point${(cl.teams[t]||[]).length===1?"":"s"}</span>
       ${(cl.teams[t]||[]).map((p,i)=>`<div class="point"><div class="pt ${(p.weak||[]).includes("title")?"weak":""}"><span class="letter">${String.fromCharCode(65+i)}</span><span class="txt">${esc(p.title)}</span></div>
         <dl>${F.map(([k,l])=>{const b=bullets(p[k]); return b.length?`<dt>${l}</dt><dd class="${(p.weak||[]).includes(k)?"weak":""}"><ul>${b.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd>`:""}).join("")}</dl>
-        ${p.gap?`<div class="gap">${esc(p.gap)}</div>`:""}<div class="lab sp">${(p.speeches||[]).join(", ")}</div></div>`).join("")||`<div class="mute">no points</div>`}</div>`;
+        ${p.gap?`<div class="gap">${esc(p.gap)}</div>`:""}${p.rigour?`<div class="hint" style="margin-top:6px"><span class="lab">rigour</span> ${esc(p.rigour)}</div>`:""}<div class="lab sp">${(p.speeches||[]).join(", ")}</div></div>`).join("")||`<div class="mute">no points</div>`}</div>`;
   return verdict+`<div class="grid2">${roomTeams(r).map(team).join("")}</div>${cl.clash?`<div class="bar"><span class="hint">${esc(cl.clash)}</span></div>`:""}`;
 }
 function speechesPage(){
